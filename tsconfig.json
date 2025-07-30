@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"lib": ["esnext", "dom"],
+		"target": "esnext",
+		"strict": true,
+		"verbatimModuleSyntax": true,
+		"moduleDetection": "force",
+		"noUncheckedIndexedAccess": true,
+		"outDir": "dist",
+		"moduleResolution": "nodenext",
+		"module": "nodenext"
+	}
+}
