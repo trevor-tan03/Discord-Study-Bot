@@ -19,22 +19,23 @@ client.once(Events.ClientReady, async (readyClient) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-	if (!interaction.isChatInputCommand()) return;
-	const command = interaction.client.commands.get(interaction.commandName);
-
-	if (!command) {
-		console.error(
-			`No command matching ${interaction.commandName} was found.`
-		);
-		return;
-	}
-
-	console.log("Interaction executed:", interaction.commandName);
-
 	try {
-		await command.execute(interaction);
+		if (interaction.isChatInputCommand()) {
+			const command = client.commands.get(interaction.commandName);
+			if (!command) return;
+			await command.execute(interaction);
+		} else if (interaction.isModalSubmit()) {
+			const front = interaction.fields.getTextInputValue("front");
+			const back = interaction.fields.getTextInputValue("back");
+
+			await interaction.reply({
+				content: `Flashcard created!\n**Front:** ${front}\n**Back:** ${back}`,
+				ephemeral: true,
+			});
+		}
 	} catch (error) {
 		console.error(error);
+		if (!interaction.isChatInputCommand()) return;
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({
 				content: "There was an error while executing this command!",
@@ -50,5 +51,4 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.login(token);
-
 client.commands = new Collection();
