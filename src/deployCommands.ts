@@ -17,10 +17,9 @@ export async function deployCommands(client: Client, commands: any[]) {
 			`Started refreshing ${client.commands.size} application (/) commands.`
 		);
 
-		const data = await rest.put(
-			Routes.applicationGuildCommands(clientId, guildId),
-			{ body: commands }
-		);
+		await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+			body: commands,
+		});
 
 		console.log(
 			`Successfully reloaded ${commands.length} application (/) commands.`
