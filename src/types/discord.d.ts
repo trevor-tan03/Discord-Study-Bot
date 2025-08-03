@@ -5,6 +5,7 @@ import { Collection } from "discord.js";
 interface Command {
 	data: any; // You'll typically define a more specific type for command data (e.g., SlashCommandBuilder)
 	execute: (interaction: any) => Promise<void>; // You'll type interaction more specifically later
+	autocomplete: (interaction: any) => Promise<void>;
 	// Add any other properties your commands might have, e.g., cooldowns, categories
 	cooldown?: number;
 }

@@ -32,6 +32,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
 				content: `Flashcard created!\n**Front:** ${front}\n**Back:** ${back}`,
 				ephemeral: true,
 			});
+		} else if (interaction.isAutocomplete()) {
+			const command = client.commands.get(interaction.commandName);
+			if (!command) return;
+			await command.autocomplete(interaction);
 		}
 	} catch (error) {
 		console.error(error);

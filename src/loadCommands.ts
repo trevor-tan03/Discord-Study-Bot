@@ -18,7 +18,11 @@ export async function loadCommands(client: Client) {
 
 			try {
 				const command = await import(fileUrl);
-				if ("data" in command && "execute" in command) {
+				if (
+					"data" in command &&
+					"execute" in command &&
+					"autocomplete" in command
+				) {
 					client.commands.set(command.data.name, command);
 					commands.push(command.data.toJSON());
 					console.log(`Loaded: ${file}`);

@@ -1,5 +1,6 @@
 import {
 	ActionRowBuilder,
+	AutocompleteInteraction,
 	CommandInteraction,
 	ModalBuilder,
 	SlashCommandBuilder,
@@ -40,4 +41,10 @@ export async function execute(interaction: CommandInteraction) {
 	);
 
 	await interaction.showModal(modal);
+}
+
+export async function autocomplete(interaction: AutocompleteInteraction) {
+	const focusedOption = interaction.options.getFocused(true);
+	console.log(focusedOption);
+	let choices;
 }

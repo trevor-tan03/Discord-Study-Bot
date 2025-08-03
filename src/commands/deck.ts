@@ -1,4 +1,8 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import {
+	AutocompleteInteraction,
+	ChatInputCommandInteraction,
+	SlashCommandBuilder,
+} from "discord.js";
 import {
 	createDeck,
 	deckExists,
@@ -44,6 +48,7 @@ export const data = new SlashCommandBuilder()
 					.setDescription(
 						"Delete a deck and all associated flashcards"
 					)
+					.setAutocomplete(true)
 					.setRequired(true)
 			)
 	)
@@ -117,7 +122,7 @@ async function handleDeleteDeckRequest(
 		else throw { reason: "failedToDelete" } satisfies DeleteDeckError;
 	} catch (error) {
 		if (typeof error === "object" && error !== null && "reason" in error) {
-			const thrownObject = error as CreateDeckError;
+			const thrownObject = error as DeleteDeckError;
 
 			switch (thrownObject.reason) {
 				case "invalidDeckName":
@@ -126,9 +131,9 @@ async function handleDeleteDeckRequest(
 						ephemeral: true,
 					});
 					break;
-				case "duplicateDeckName":
+				case "deckDoesNotExist":
 					await interaction.reply({
-						content: "Deck name is already taken",
+						content: "Specified deck does not exist",
 						ephemeral: true,
 					});
 					break;
@@ -178,4 +183,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 			});
 			break;
 	}
+}
+
+export async function autocomplete(interaction: AutocompleteInteraction) {
+	const focusedOption = interaction.options.getFocused(true);
+	let choices;
+
+	if (focusedOption.name === "deckname") {
+		choices = (await listDecks()).map((deck) => deck.name);
+	} else {
+		console.error(`No autocomplete for ${focusedOption.name}`);
+		return;
+	}
+
+	const filtered = choices?.filter((choice) =>
+		choice.startsWith(focusedOption.value)
+	);
+	await interaction.respond(
+		filtered?.map((choice) => ({ name: choice, value: choice }))
+	);
 }
