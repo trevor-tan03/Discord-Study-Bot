@@ -5,7 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema
 		.createTable("decks")
 		.addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
-		.addColumn("name", "text", (col) => col.notNull())
+		.addColumn("name", "text", (col) => col.notNull().unique())
 		.addColumn("description", "text")
 		.addColumn("created_at", "integer", (col) =>
 			col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`)
@@ -15,7 +15,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 	await db.schema
 		.createTable("tags")
 		.addColumn("id", "integer", (col) => col.primaryKey().autoIncrement())
-		.addColumn("name", "text", (col) => col.notNull())
+		.addColumn("name", "text", (col) => col.notNull().unique())
 		.addColumn("created_at", "integer", (col) =>
 			col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`)
 		)

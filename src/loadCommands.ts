@@ -15,11 +15,16 @@ export async function loadCommands(client: Client) {
 		for (const file of commandFiles) {
 			const filePath = path.join(commandsPath, file);
 			const fileUrl = pathToFileURL(filePath).href;
-			const command = await import(fileUrl);
 
-			if ("data" in command && "execute" in command) {
-				client.commands.set(command.data.name, command);
-				commands.push(command.data.toJSON());
+			try {
+				const command = await import(fileUrl);
+				if ("data" in command && "execute" in command) {
+					client.commands.set(command.data.name, command);
+					commands.push(command.data.toJSON());
+					console.log(`Loaded: ${file}`);
+				}
+			} catch (error) {
+				console.error(`Failed to import or process ${file}:`, error);
 			}
 		}
 	} catch (error) {

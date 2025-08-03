@@ -38,12 +38,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
 		if (!interaction.isChatInputCommand()) return;
 		if (interaction.replied || interaction.deferred) {
 			await interaction.followUp({
-				content: "There was an error while executing this command!",
+				content: `There was an error while executing this command: **${
+					(error as Error).message
+				}**`,
 				flags: MessageFlags.Ephemeral,
 			});
 		} else {
 			await interaction.reply({
-				content: "There was an error while executing this command!",
+				content: `There was an error while executing this command: **${
+					(error as Error).message
+				}**`,
 				flags: MessageFlags.Ephemeral,
 			});
 		}
