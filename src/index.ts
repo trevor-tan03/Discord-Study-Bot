@@ -6,6 +6,7 @@ import {
 	MessageFlags,
 } from "discord.js";
 import "dotenv/config";
+import { handleCreateFlashcard } from "./commands/flashcard.js";
 import { deployCommands } from "./deployCommands.js";
 import { loadCommands } from "./loadCommands.js";
 
@@ -25,13 +26,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
 			if (!command) return;
 			await command.execute(interaction);
 		} else if (interaction.isModalSubmit()) {
-			const front = interaction.fields.getTextInputValue("front");
-			const back = interaction.fields.getTextInputValue("back");
-
-			await interaction.reply({
-				content: `Flashcard created!\n**Front:** ${front}\n**Back:** ${back}`,
-				ephemeral: true,
-			});
+			// Currently only using a modal for creating flashcard
+			if (interaction.customId.startsWith("flashcard")) {
+				await handleCreateFlashcard(interaction);
+			} else {
+				throw { reason: "Unable to handle unexpected modal" };
+			}
 		} else if (interaction.isAutocomplete()) {
 			const command = client.commands.get(interaction.commandName);
 			if (!command) return;

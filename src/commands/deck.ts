@@ -187,7 +187,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
 export async function autocomplete(interaction: AutocompleteInteraction) {
 	const focusedOption = interaction.options.getFocused(true);
-	let choices;
+	let choices: string[] = [];
 
 	if (focusedOption.name === "deckname") {
 		choices = (await listDecks()).map((deck) => deck.name);

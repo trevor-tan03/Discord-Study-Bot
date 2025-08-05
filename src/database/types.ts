@@ -36,14 +36,13 @@ export type TagUpdate = Updateable<TagTable>;
 export interface FlashcardTable {
 	id: Generated<number>;
 	deck_id: number;
-	owner_id: number;
 	front: string;
 	back: string;
 
-	due_date: string;
-	ease_factor: number;
-	interval: number;
-	repetitions: number;
+	// due_date: string;
+	// ease_factor: number;
+	// interval: number;
+	// repetitions: number;
 }
 
 export type Flashcard = Selectable<FlashcardTable>;
